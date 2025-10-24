@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCQ Competition Portal - Login</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f7f6f7 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 40px;
+            text-align: center;
+        }
+        .header {
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #1f2937;
+            margin: 0;
+            font-size: 2rem;
+        }
+        .header p {
+            color: #6b7280;
+            margin: 5px 0 0 0;
+        }
+        .form-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        .btn {
+            width: 100%;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px 0;
+        }
+        .btn:hover {
+            background: #2563eb;
+        }
+        .btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        .info-box {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .info-box h3 {
+            margin: 0 0 10px 0;
+            color: #0c4a6e;
+        }
+        .info-box p {
+            margin: 5px 0;
+            color: #164e63;
+            font-size: 14px;
+        }
+        .demo-credentials {
+            background: #dcfce7;
+            border: 1px solid #16a34a;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .demo-credentials h4 {
+            margin: 0 0 10px 0;
+            color: #15803d;
+        }
+        .demo-credentials p {
+            margin: 5px 0;
+            color: #166534;
+            font-size: 14px;
+        }
+        .loading {
+            display: none;
+            color: #6b7280;
+        }
+        .error {
+            color: #ef4444;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 6px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        .success {
+            color: #059669;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 6px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 MCQ Competition Portal</h1>
+            <p>Secure Online Competition Platform</p>
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="userType">Select User Type:</label>
+                <select id="userType" required>
+                    <option value="">Choose your role</option>
+                    <option value="admin">👨‍💼 Administrator</option>
+                    <option value="student">👨‍🎓 Student</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="Enter your username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+            
+            <button type="submit" class="btn" id="loginBtn">
+                🚀 Login to Portal
+            </button>
+            
+            <div class="loading" id="loading">Logging in...</div>
+            
+            <div id="message"></div>
+        </form>
+        
+      
+        
+       
+    </div>
+
+   
+</body>
+</html>

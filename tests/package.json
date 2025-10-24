@@ -1,0 +1,46 @@
+{
+  "name": "mcq-competition-tests",
+  "version": "1.0.0",
+  "description": "Test suite for MCQ Competition Portal",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:integration": "jest --testPathPattern=integration",
+    "test:unit": "jest --testPathPattern=unit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.5.1",
+    "@types/jest": "^29.5.8",
+    "firebase-functions-test": "^3.1.1",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.2"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": ["<rootDir>/setup.ts"],
+    "testMatch": [
+      "<rootDir>/unit/**/*.test.ts",
+      "<rootDir>/unit/**/*.test.tsx",
+      "<rootDir>/integration/**/*.test.ts"
+    ],
+    "collectCoverageFrom": [
+      "../frontend/src/**/*.{ts,tsx}",
+      "../backend/src/**/*.ts",
+      "!**/*.d.ts",
+      "!**/node_modules/**"
+    ],
+    "coverageDirectory": "coverage",
+    "coverageReporters": ["text", "lcov", "html"]
+  }
+}
