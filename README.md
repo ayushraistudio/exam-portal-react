@@ -4,6 +4,7 @@ A secure, real-time online MCQ competition platform with advanced anti-cheating 
 
 ## 🚀 Quick Start
 
+
 ### Prerequisites
 - Node.js 18+
 - Firebase account
