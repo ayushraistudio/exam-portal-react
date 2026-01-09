@@ -1,6 +1,13 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { User, ApiResponse } from '../types'
+
+// Types define kar rahe hain taaki errors na aayein
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: 'admin' | 'student';
+}
 
 // Firebase configuration
 const firebaseConfig = {
@@ -14,108 +21,50 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
-const auth = getAuth(app)
-
-// API base URL
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001'
+export const auth = getAuth(app)
 
 class AuthService {
-  private getAuthToken = async (): Promise<string | null> => {
-    const user = auth.currentUser
-    if (!user) return null
-    
+  
+  // Login Function - Ab ye Direct Firebase se baat karega
+  async login(username: string, password: string, userType: 'admin' | 'student') {
     try {
-      return await user.getIdToken()
-    } catch (error) {
-      console.error('Error getting auth token:', error)
-      return null
-    }
-  }
-
-  private makeRequest = async <T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<ApiResponse<T>> => {
-    const token = await this.getAuthToken()
-    
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-        ...options.headers
-      }
-    })
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}))
-      throw new Error(errorData.error || `HTTP ${response.status}`)
-    }
-
-    return response.json()
-  }
-
-  async login(username: string, password: string, userType: 'admin' | 'student'): Promise<ApiResponse<{ user: User; sessionId: string }>> {
-    try {
-      // Make real API call to backend
-      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username,
-          password,
-          userType
-        })
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.error || `HTTP ${response.status}`)
-      }
-
-      const data = await response.json()
-      return data
-    } catch (error) {
-      console.error('Login error:', error)
-      throw error
-    }
-  }
-
-  async logout(): Promise<void> {
-    try {
-      // Logout from backend
-      await this.makeRequest('/api/auth/logout', { method: 'POST' })
+      console.log("Attempting login via Firebase directly...");
       
-      // Sign out from Firebase Auth
-      await signOut(auth)
-    } catch (error) {
-      console.error('Logout error:', error)
-      // Still sign out from Firebase even if backend logout fails
-      await signOut(auth)
+      // 1. Firebase se login karo
+      const userCredential = await signInWithEmailAndPassword(auth, username, password);
+      const user = userCredential.user;
+
+      // 2. Token generate karo
+      const token = await user.getIdToken();
+
+      // 3. Store ke liye Fake Response return karo
+      // (Kyunki backend abhi ready nahi hai, hum frontend ko batayenge ki sab okay hai)
+      return {
+        user: {
+          id: user.uid,
+          email: user.email || '',
+          name: user.displayName || username.split('@')[0], // Email ka pehla hissa naam bana diya
+          role: userType // Jo tumne select kiya wahi role maan liya jayega
+        },
+        sessionId: 'offline-session-' + Date.now(),
+        token: token
+      };
+
+    } catch (error: any) {
+      console.error('Login error:', error);
+      throw new Error(error.message || 'Login failed');
     }
   }
 
-  async getCurrentUser(): Promise<ApiResponse<User>> {
+  async logout() {
     try {
-      return await this.makeRequest<User>('/api/auth/me')
+      await signOut(auth);
     } catch (error) {
-      console.error('Get current user error:', error)
-      throw error
+      console.error('Logout error:', error);
     }
   }
 
-  async refreshSession(): Promise<ApiResponse> {
-    try {
-      return await this.makeRequest('/api/auth/refresh', { method: 'POST' })
-    } catch (error) {
-      console.error('Refresh session error:', error)
-      throw error
-    }
-  }
-
-  // Utility method to check if user is authenticated
+  // Check auth status
   isAuthenticated(): boolean {
     return auth.currentUser !== null
   }
